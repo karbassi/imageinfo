@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Image Color Picker</title>
+  <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="">
+  <div class="wrapper info">
+    <div class="">
+      <h1>Drop an image here.</h1>
+      <h2>Click to lock the color.</h2>
+    </div>
+  </div>
+
+  <div class="wrapper canvas">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div class="result">
+    <div class="color"></div>
+    <div class="text">
+      <p class="hex">#000000</p>
+      <p class="rgb">rbg(0, 0, 0)</p>
+      <p>(<span class="x">0</span>, <span class="y">0</span>)</p>
+    </div>
+  </div>
+
+  <script src="src.js"></script>
+</body>
+</html>
