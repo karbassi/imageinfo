@@ -14,6 +14,7 @@ body {
     background-color: #F8F8F8;
 
     font-family: "Anonymous Pro", monospace;
+    font-size: 16px;
 
     text-rendering: optimizeLegibility;
 }
@@ -52,6 +53,10 @@ body.active #canvas {
 
 .info h2 {
     font-size: 3vw;
+}
+
+.error {
+    color: #990000;
 }
 
 .result {
