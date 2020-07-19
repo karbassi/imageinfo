@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Image Color Picker</title>
-  <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="favicon.svg">
 </head>
 
 <body>
-  <div class="wrapper info">
+  <header class="wrapper info">
     <div>
       <h1>Drop an image here.</h1>
       <h2>Click to lock the color.</h2>
       <h3 class="error"></h3>
     </div>
-  </div>
+  </header>
 
-  <div class="wrapper canvas">
+  <main class="wrapper canvas">
     <canvas id="canvas"></canvas>
-  </div>
+  </main>
 
-  <div class="result">
+  <aside class="result">
     <div class="color"></div>
     <div class="text">
       <p class="hex">#000000</p>
       <p class="rgb">rbg(0, 0, 0)</p>
       <p>(<span class="x">0</span>, <span class="y">0</span>)</p>
     </div>
-  </div>
+  </aside>
 
-  <script src="src.js"></script>
+  <script src="assets/js/index.js"></script>
 </body>
 </html>
