@@ -1,4 +1,4 @@
-const $canvas = document.getElementById('canvas');
+const $canvas = document.querySelector('#canvas');
 const context = $canvas.getContext('2d');
 const $hiddenImage = document.createElement('img');
 const $hex = document.querySelector('.hex');
@@ -9,16 +9,16 @@ const $y = document.querySelector('.y');
 const $error = document.querySelector('.error');
 let pos = {
   x: 0,
-  y: 0
+  y: 0,
 };
 
 let isLocked = false;
 
-function rgbToHex(r, g, b) {
+const rgbToHex = (r, g, b) => {
   return '#' + ((r << 16) | (g << 8) | b).toString(16);
-}
+};
 
-function makeCursor(color) {
+const makeCursor = (color) => {
   const $cursor = document.createElement('canvas');
   const ctx = $cursor.getContext('2d');
 
@@ -48,61 +48,67 @@ function makeCursor(color) {
   ctx.fill();
 
   $canvas.style.cursor = 'crosshair';
-  $canvas.style.cursor = 'url(' + $cursor.toDataURL() + ') 6 6, crosshair';
-}
+  $canvas.style.cursor = `url(${$cursor.toDataURL()}) 6 6, crosshair`;
+};
 
-function loadImage(file) {
-  if (typeof (file) === 'string' && file.indexOf('http') === 0) {
+const loadImage = (file) => {
+  if (typeof file === 'string' && file.indexOf('http') === 0) {
     fetch(file)
-      .then(response => response.blob())
-      .then(blob => {
+      .then((response) => response.blob())
+      .then((blob) => {
         document.body.className = 'active';
         $hiddenImage.src = URL.createObjectURL(blob);
       })
       .catch(() => {
-        $error.textContent = 'This file can\'t be loaded. Try another URL.';
+        $error.textContent = "This file can't be loaded. Try another URL.";
       });
 
     return;
   }
 
-  if (typeof FileReader !== 'undefined' && file.type.indexOf('image') !== -1) {
+  if (typeof FileReader !== 'undefined' && file.type.includes('image')) {
     const reader = new FileReader();
 
-    reader.onload = event => {
+    reader.addEventListener('load', (event) => {
       $hiddenImage.src = event.target.result;
-    };
+    });
 
     reader.readAsDataURL(file);
   }
-}
+};
 
-$hiddenImage.addEventListener('load', () => {
-  $canvas.width = $hiddenImage.width;
-  $canvas.height = $hiddenImage.height;
-  context.clearRect(0, 0, $canvas.width, $canvas.height);
-  context.drawImage($hiddenImage, 0, 0);
-}, false);
+$hiddenImage.addEventListener(
+  'load',
+  () => {
+    $canvas.width = $hiddenImage.width;
+    $canvas.height = $hiddenImage.height;
+    context.clearRect(0, 0, $canvas.width, $canvas.height);
+    context.drawImage($hiddenImage, 0, 0);
+  },
+  false
+);
 
-$canvas.addEventListener('mousemove', function (event) {
+$canvas.addEventListener('mousemove', (event) => {
   if (isLocked) {
     return;
   }
 
-  pos = {
-    x: event.offsetX,
-    y: event.offsetY
-  };
+  pos.x = event.offsetX;
+  pos.y = event.offsetY;
 
-  if (pos.x > $canvas.width || pos.y > $canvas.height || pos.x < 1 || pos.y < 1) {
+  if (
+    pos.x > $canvas.width ||
+    pos.y > $canvas.height ||
+    pos.x < 1 ||
+    pos.y < 1
+  ) {
     return;
   }
 
-  const ctx = this.getContext('2d');
-  const p = ctx.getImageData(pos.x, pos.y, 1, 1).data;
+  const [r, g, b] = this.getContext('2d').getImageData(pos.x, pos.y, 1, 1).data;
 
-  const hex = rgbToHex(p[0], p[1], p[2]);
-  const rgb = 'rgb(' + p[0] + ',' + p[1] + ',' + p[2] + ')';
+  const hex = rgbToHex(r, g, b);
+  const rgb = `rgb(${r}, ${g}, ${b})`;
 
   $hex.textContent = hex.toUpperCase();
   $rgb.textContent = rgb;
@@ -114,15 +120,16 @@ $canvas.addEventListener('mousemove', function (event) {
   makeCursor(hex);
 });
 
-$canvas.addEventListener('click', event => {
+$canvas.addEventListener('click', (event) => {
   if (!isLocked) {
-    console.log(pos.x, pos.y);
+    // console.log(pos.x, pos.y);
   }
+
   isLocked = !isLocked;
   event.preventDefault();
 });
 
-document.addEventListener('drop', event => {
+document.addEventListener('drop', (event) => {
   document.body.className = 'active';
 
   const files = event.dataTransfer.files;
@@ -134,28 +141,23 @@ document.addEventListener('drop', event => {
   event.preventDefault();
 });
 
-document.addEventListener('dragover', event => {
+const resetBodyClass = (event) => {
+  document.body.className = 'hover';
+  event.preventDefault();
+};
+
+document.addEventListener('dragover', resetBodyClass);
+document.addEventListener('dragleave', resetBodyClass);
+document.addEventListener('dragend', resetBodyClass);
+
+document.addEventListener('dragenter', (event) => {
   document.body.className = 'hover';
   event.preventDefault();
 });
 
-document.addEventListener('dragenter', event => {
-  document.body.className = 'hover';
-  event.preventDefault();
-});
+const searchParameters = new URLSearchParams(window.location.search); // ?src=123
+const src = searchParameters.get('src');
 
-document.addEventListener('dragleave', event => {
-  document.body.className = '';
-  event.preventDefault();
-});
-
-document.addEventListener('dragend', event => {
-  document.body.className = '';
-  event.preventDefault();
-});
-
-const searchParams = new URLSearchParams(window.location.search); // ?src=123
-const src = searchParams.get('src');
 if (src) {
   loadImage(src);
 }
