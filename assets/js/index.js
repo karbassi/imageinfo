@@ -1,4 +1,4 @@
-const $canvas = document.querySelector('#canvas');
+const $canvas = document.querySelector('.canvas');
 const context = $canvas.getContext('2d');
 const $hiddenImage = document.createElement('img');
 const $hex = document.querySelector('.hex');
@@ -14,44 +14,11 @@ let pos = {
 
 let isLocked = false;
 
-const rgbToHex = (r, g, b) => {
+function rgbToHex(r, g, b) {
   return '#' + ((r << 16) | (g << 8) | b).toString(16);
-};
+}
 
-const makeCursor = (color) => {
-  const $cursor = document.createElement('canvas');
-  const ctx = $cursor.getContext('2d');
-
-  $cursor.width = 41;
-  $cursor.height = 41;
-
-  // Crosshair
-  ctx.beginPath();
-  ctx.moveTo(0, 6);
-  ctx.lineTo(12, 6);
-  ctx.moveTo(6, 0);
-  ctx.lineTo(6, 12);
-  ctx.lineWidth = 1;
-  ctx.lineCap = 'butt';
-  ctx.shadowColor = '#FFF';
-  ctx.shadowBlur = 2;
-  ctx.strokeStyle = '#000';
-  ctx.stroke();
-
-  // Color circle
-  ctx.beginPath();
-  ctx.arc(25, 25, 14, 0, 2 * Math.PI, false);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#000';
-  ctx.stroke();
-  ctx.fillStyle = color;
-  ctx.fill();
-
-  $canvas.style.cursor = 'crosshair';
-  $canvas.style.cursor = `url(${$cursor.toDataURL()}) 6 6, crosshair`;
-};
-
-const loadImage = (file) => {
+function loadImage(file) {
   if (typeof file === 'string' && file.indexOf('http') === 0) {
     fetch(file)
       .then((response) => response.blob())
@@ -75,7 +42,7 @@ const loadImage = (file) => {
 
     reader.readAsDataURL(file);
   }
-};
+}
 
 $hiddenImage.addEventListener(
   'load',
@@ -105,7 +72,9 @@ $canvas.addEventListener('mousemove', (event) => {
     return;
   }
 
-  const [r, g, b] = this.getContext('2d').getImageData(pos.x, pos.y, 1, 1).data;
+  const [r, g, b] = $canvas
+    .getContext('2d')
+    .getImageData(pos.x, pos.y, 1, 1).data;
 
   const hex = rgbToHex(r, g, b);
   const rgb = `rgb(${r}, ${g}, ${b})`;
@@ -116,15 +85,9 @@ $canvas.addEventListener('mousemove', (event) => {
   $y.textContent = pos.y;
 
   $color.style.backgroundColor = hex;
-
-  makeCursor(hex);
 });
 
 $canvas.addEventListener('click', (event) => {
-  if (!isLocked) {
-    // console.log(pos.x, pos.y);
-  }
-
   isLocked = !isLocked;
   event.preventDefault();
 });
@@ -141,10 +104,10 @@ document.addEventListener('drop', (event) => {
   event.preventDefault();
 });
 
-const resetBodyClass = (event) => {
+function resetBodyClass(event) {
   document.body.className = 'hover';
   event.preventDefault();
-};
+}
 
 document.addEventListener('dragover', resetBodyClass);
 document.addEventListener('dragleave', resetBodyClass);

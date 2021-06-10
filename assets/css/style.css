@@ -10,11 +10,11 @@ body {
 }
 
 body {
+  font-family: monospace;
+  font-size: 16px;
+
   color: #191919;
   background-color: #f8f8f8;
-
-  font-family: 'Anonymous Pro', monospace;
-  font-size: 16px;
 
   text-rendering: optimizeLegibility;
 }
@@ -23,30 +23,30 @@ body.hover {
   background-color: #ddd;
 }
 
-body.active #canvas {
+body.active .canvas {
   margin: 0 auto;
 }
 
-.wrapper {
+.canvas-wrapper,
+.info {
   display: grid;
 
   height: 100%;
 
   text-align: center;
 
-  align-items: center;
-  justify-content: center;
+  place-items: center;
 }
 
 .info h1 {
-  height: 1em;
-  margin: 0;
-  padding: 0;
-
   font-size: 5vw;
   font-weight: normal;
   font-style: normal;
   line-height: 1;
+
+  height: 1em;
+  margin: 0;
+  padding: 0;
 }
 
 .info h2 {
@@ -62,49 +62,42 @@ body.active #canvas {
   top: 10px;
   right: 10px;
 
-  width: 250px;
+  display: grid;
+
   margin: 0 auto;
   padding: 3px;
 
-  text-align: left;
-
   border: 1px dashed #ddd;
   background: #fff;
-}
 
-.text {
-  float: left;
+  grid-template-columns: 85px 200px;
 }
 
 .color {
-  float: left;
-
+  box-sizing: border-box;
   width: 50px;
   height: 50px;
   margin: 1em;
 
-  border: 1px solid #111111;
-  background: #dddddd;
+  border: 1px solid #111;
+  background: #ddd;
+
+  align-self: center;
 }
 
-#canvas {
-  padding: 20px;
-
-  border: 3px dashed #191919;
+.canvas {
+  cursor: crosshair;
 }
 
 /* Hide when active */
 body.active .info,
-.canvas,
+.canvas-wrapper,
 .result {
   display: none;
 }
 
 /* Show when active */
-body.active .result {
-  display: block;
-}
-
-body.active .canvas {
+body.active .result,
+body.active .canvas-wrapper {
   display: grid;
 }
